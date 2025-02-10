@@ -17,7 +17,7 @@ const Navbar = () => {
         const fetchUserData = async () => {
             if (user) {
                 try {
-                    const response = await axios.get(`http://localhost:5000/users/${user.uid}`);
+                    const response = await axios.get(`https://taskmanager-server-db69.onrender.com/users/${user.uid}`);
                     console.log("Fetched user data:", response.data); // Debugging log
                     setUserData(response.data);
                 } catch (error) {

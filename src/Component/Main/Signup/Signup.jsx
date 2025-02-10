@@ -34,7 +34,7 @@ const SignUp = () => {
             });
 
             // Step 3: Send user data to backend
-            await axios.post("http://localhost:5000/users", {
+            await axios.post("https://taskmanager-server-db69.onrender.com/users", {
                 uid: user.uid,  
                 name,
                 email,

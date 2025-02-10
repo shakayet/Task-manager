@@ -4,6 +4,7 @@ import { FiMoreVertical } from "react-icons/fi";
 import EditTaskModal from "./EditTaskModal";
 import DeleteTaskModal from "./DeleteTaskModal";
 import TaskDetailsModal from "./TaskDetailsModal";
+import ConfirmationModal from "./ConfirmationModal"; // Import the confirmation modal
 
 const Tasks = () => {
   const [tasks, setTasks] = useState([]);
@@ -11,11 +12,12 @@ const Tasks = () => {
   const [editingTask, setEditingTask] = useState(null);
   const [taskToDelete, setTaskToDelete] = useState(null);
   const [selectedTask, setSelectedTask] = useState(null);
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false); // State to control the confirmation modal visibility
 
   // Fetch tasks
   useEffect(() => {
     axios
-      .get("http://localhost:5000/tasks")
+      .get("https://taskmanager-server-db69.onrender.com/tasks")
       .then((response) => setTasks(response.data))
       .catch((error) => console.error("Error fetching tasks:", error));
   }, []);
@@ -80,16 +82,31 @@ const Tasks = () => {
         <EditTaskModal
           task={editingTask}
           onClose={() => setEditingTask(null)}
-          onUpdate={(updatedTask) =>
-            setTasks(tasks.map((task) => (task._id === updatedTask._id ? updatedTask : task)))
-          }
+          onUpdate={(updatedTask) => {
+            setTasks((prevTasks) =>
+              prevTasks.map((task) => (task._id === updatedTask._id ? updatedTask : task))
+            );
+            setEditingTask(null); // Close the modal after update
+            setShowConfirmationModal(true); // Show confirmation modal after update
+          }}
         />
       )}
       {taskToDelete && (
         <DeleteTaskModal
           task={taskToDelete}
           onClose={() => setTaskToDelete(null)}
-          onDelete={() => setTasks(tasks.filter((task) => task._id !== taskToDelete._id))}
+          onDelete={() => {
+            setTasks((prevTasks) => prevTasks.filter((task) => task._id !== taskToDelete._id));
+            setTaskToDelete(null); // Close delete modal after deletion
+          }}
+        />
+      )}
+
+      {/* Confirmation Modal */}
+      {showConfirmationModal && (
+        <ConfirmationModal
+          message="Your task has been updated. Please refresh the page to see the changes."
+          onClose={() => setShowConfirmationModal(false)}
         />
       )}
     </div>

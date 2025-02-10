@@ -2,10 +2,15 @@ import React from "react";
 import axios from "axios";
 
 const DeleteTaskModal = ({ task, onClose, onDelete }) => {
-  const handleDelete = () => {
-    axios.delete(`http://localhost:5000/tasks/${task._id}`).then(() => {
-      onDelete();
-    });
+  const handleDelete = async () => {
+    try {
+      await axios.delete(`https://taskmanager-server-db69.onrender.com/tasks/${task._id}`);
+      onDelete();  // Remove the task from UI
+      onClose();   // Close the modal
+    } catch (error) {
+      console.error("Error deleting task:", error);
+      alert("Failed to delete the task.");
+    }
   };
 
   return (

@@ -37,7 +37,7 @@ const Profile = () => {
 
     useEffect(() => {
         if (user) {
-            axios.get(`http://localhost:5000/user/${user.email}`)
+            axios.get(`https://taskmanager-server-db69.onrender.com/user/${user.email}`)
                 .then(response => {
                     setProfile(response.data);
                     setNewName(response.data.name);
@@ -50,7 +50,7 @@ const Profile = () => {
 
     const updateProfileData = async () => {
         try {
-            const response = await axios.put(`http://localhost:5000/user/${user.email}`, {
+            const response = await axios.put(`https://taskmanager-server-db69.onrender.com/user/${user.email}`, {
                 name: newName,
                 photo: newPhoto,
                 email: newEmail,
